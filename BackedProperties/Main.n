@@ -25,6 +25,13 @@ module Program
     WriteLine(account.Name);
     WriteLine(account.Comment);
     
+    WriteLine("---------------------");
+    account.Comment = "I can do it, baby";
+    WriteLine(account.Comment);
+    
+    WriteLine("---------------------");
+    WriteLine(account.GetBackingFields()["Comment"]);
+    
     _ = ReadLine();
   }
 }

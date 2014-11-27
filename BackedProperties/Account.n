@@ -24,5 +24,10 @@ namespace BackedProperties
     {
       Fields = fields;
     }
+    
+    public GetBackingFields() : Dictionary[string, string]
+    {
+      Fields;
+    }
   }
 }

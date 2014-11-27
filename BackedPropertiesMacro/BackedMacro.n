@@ -47,16 +47,12 @@ namespace BackedPropertiesMacro
                 {
                   getter.Body = <[$(fieldVal.Name : usesite)[$(p.Name)]]>;
                 }
-                /*
-                def setter = (p.GetSetter() :> MethodBuilder);    
+                
+                def setter = (p.GetSetter() :> MethodBuilder); 
                 when (setter != null)
                 {
-                    setter.Body = <[
-                        $(setter.Body);
-                        RaisePropertyChanged($(p.Name : string));
-                    ]>;
+                    setter.Body = <[ $(fieldVal.Name : usesite)[$(p.Name)] = $("value" : dyn); ]>;
                 }
-                */
             }
         }
     }
