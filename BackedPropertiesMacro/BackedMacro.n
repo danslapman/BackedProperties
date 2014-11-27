@@ -1,0 +1,63 @@
+﻿using Nemerle;
+using Nemerle.Assertions;
+using Nemerle.Collections;
+using Nemerle.Compiler;
+using Nemerle.Compiler.Parsetree;
+using Nemerle.Compiler.Typedtree;
+using Nemerle.Text;
+using Nemerle.Utility;
+ 
+using System;
+using SCG = System.Collections.Generic;
+using System.Linq;
+using System.ComponentModel;
+
+namespace BackedPropertiesMacro
+{
+    [MacroUsage(MacroPhase.WithTypedMembers, MacroTargets.Class, Inherited = false, AllowMultiple = false)]  
+    public macro BackedProps(tb : TypeBuilder)
+    {
+        NPCHelper.FixProperties(tb)
+    }
+    
+    [MacroUsage(MacroPhase.BeforeInheritance, MacroTargets.Field, Inherited = false, AllowMultiple = false)]
+    public macro BackingField(tb : TypeBuilder, field : ParsedField)
+    {
+        NPCHelper.SetBackingField(field);
+    }
+   
+    module NPCHelper
+    {
+        private mutable backingField : ClassMember.Field;
+        
+        public SetBackingField(field : ClassMember.Field) : void
+        {
+          backingField = field;
+        }
+           
+        public FixProperties(tb : TypeBuilder) : void
+        {
+            def properties = tb.GetProperties();
+           
+            foreach(p is PropertyBuilder in properties)
+            {
+                def fieldVal = backingField;
+                def getter = (p.GetGetter() :> MethodBuilder);
+                when (getter != null)
+                {
+                  getter.Body = <[$(fieldVal.Name : usesite)[$(p.Name)]]>;
+                }
+                /*
+                def setter = (p.GetSetter() :> MethodBuilder);    
+                when (setter != null)
+                {
+                    setter.Body = <[
+                        $(setter.Body);
+                        RaisePropertyChanged($(p.Name : string));
+                    ]>;
+                }
+                */
+            }
+        }
+    }
+}

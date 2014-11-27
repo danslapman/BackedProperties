@@ -1,0 +1,28 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using BackedPropertiesMacro;
+
+namespace BackedProperties
+{
+  [BackedProps]
+  public class Account
+  {
+    [BackingField]
+    private Fields: Dictionary[string, string];
+    
+    public AccountId: string  { get; set; }
+    public Name: string { get; set; }
+    public Comment: string { get; set; }
+    
+    public this(fields: Dictionary[string, string])
+    {
+      Fields = fields;
+    }
+  }
+}
